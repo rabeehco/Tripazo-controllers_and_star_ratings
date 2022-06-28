@@ -1,4 +1,5 @@
 <% layout('layouts/boilerplate')%>
+<link rel="stylesheet" href="/stylesheets/stars.css">
 
 <div class="row">
     <div class="col-6">
@@ -48,18 +49,22 @@
         <% for(let review of campground.reviews) { %> 
         <div class="mb-3 card">
             <div class="card-body">
-            <h5 class="card-title"> Rating: <%= review.rating %></h5>
+            <!-- <h5 class="card-title"> Rating: <%#= review.rating %></h5> -->
+            <!-- <h3>Rated element name</h3> -->
+            <p class="starability-result" data-rating="<%=review.rating%>">
+              Rated: <%=review.rating%> stars
+            </p>
             <% if(!review.author || review.author == null){ %> <!-- Refer Note 1 -->
                 <h6 class="card-subitile mb-2 text-muted">By Deleted User</h6>             
             <% } else { %> 
                 <h6 class="card-subitile mb-2 text-muted">By <%=review.author.username%> </h6>
                 <% } %> 
             <p class="card-text">Review: <%= review.body %> </p>
-            <% if(currentUser && review.author.equals(currentUser._id)){ %> 
-            <form action="/campgrounds/<%= campground._id%>/reviews/<%=review._id%>?_method=Delete" method="POST">
-                <button class="btn-sm btn-danger btn">Delete</button>
-            </form>
-            <% } %> 
+            <% if(review.author && currentUser && review.author.equals(currentUser._id)){ %> <!-- Added review.author by me -->
+                <form action="/campgrounds/<%= campground._id%>/reviews/<%=review._id%>?_method=Delete" method="POST">
+                    <button class="btn-sm btn-danger btn">Delete</button>
+                </form>
+                <% } %>  
         </div>
         </div>
         <% } %>  
@@ -69,3 +74,6 @@
 <!-- Note -->
 <!-- 1: Showing error when I add  "<h6 class="card-subitile mb-2 text-muted">By <%#=review.author.username%></h6>"  -->
 <!-- Error was "Cannot read the property of undefined i.e username"  -->
+
+<!-- { "_id" : ObjectId("62b2b7343ee98eb945012694"), "title" : "Tumbling Hunting Camps", "image" : "https://source.unsplash.com/collection/483251", "price" : 18, "description" : "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione, repellendus. Neque iste qui ratione omnis facilis similique cumque, ipsum sunt quis commodi excepturi accusamus nobis, eius nisi vitae corporis iure.", "location" : "Baldwin Park, California", "author" : ObjectId("62b177d665862ad8e05e2139"), "reviews" : [ ObjectId("62b2f02a749cc99955fd4632"), ObjectId("62ba6d6f4088a93fee809a26") ], "__v" : 10 } -->
+<!-- { "_id" : ObjectId("62b2b7343ee98eb945012698"), "title" : "Silent Cliffs", "image" : "https://source.unsplash.com/collection/483251", "price" : 20, "description" : "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ratione, repellendus. Neque iste qui ratione omnis facilis similique cumque, ipsum sunt quis commodi excepturi accusamus nobis, eius nisi vitae corporis iure.", "location" : "Sarasota, Florida", "author" : ObjectId("62b177d665862ad8e05e2139"), "reviews" : [ ObjectId("62b2d85705afe971d3f5a9c1") ], "__v" : 1 } -->
